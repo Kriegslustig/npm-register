@@ -30,9 +30,11 @@ function bearer (token) {
         describe('logged in', () => {
           before(co.wrap(function * () {
             token = yield user.authenticate(testUser)
+            console.log('yield', token)
           }))
 
           it('returns the username', () => {
+            console.log(token)
             return request.get('/-/whoami')
               .use(bearer(token))
               .accept('json')
@@ -69,5 +71,15 @@ function bearer (token) {
         })
       })
     })
+
+    describe('default user', co.wrap(function * () {
+      config.defaultUser = 'test'
+      it('always is always authenticated as test', co.wrap(function * () {
+        yield request.get('/-/whoami')
+          .accept('json')
+          .then((res) => expect(res.body.username, 'to equal', 'test'))
+      }))
+      config.defaultUser = undefined
+    }))
   })
 })

@@ -18,7 +18,9 @@ module.exports = {
   s3: {
     bucket: env.AWS_S3_BUCKET,
     region: env.AWS_DEFAULT_REGION
-  }
+  },
+  /* Bypasses authentification and always sets username to this value */
+  defaultUser: env.NPM_REGISTER_DEFAULT_USER
 }
 
 let Storage = require('./lib/storage/' + (env.NPM_REGISTER_STORAGE || 'fs'))

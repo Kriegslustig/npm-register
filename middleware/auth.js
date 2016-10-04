@@ -1,9 +1,12 @@
 'use strict'
 
 const user = require('../lib/user')
+const config = require('../config')
 
 module.exports = function * (next) {
-  if (this.headers.authorization) {
+  if (config.defaultUser) {
+    this.username = config.defaultUser
+  } else if (this.headers.authorization) {
     let token = this.headers.authorization.split(' ')[1]
     this.username = yield user.findByToken(token)
   }
